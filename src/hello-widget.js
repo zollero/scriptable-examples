@@ -3,6 +3,7 @@ let widgetHello = new ListWidget();
 var today = new Date();
 
 var widgetInputRAW = args.widgetParameter;
+// var widgetInputRAW = 'bg6.png|50|#ffffff';
 
 try {
 	widgetInputRAW.toString();
