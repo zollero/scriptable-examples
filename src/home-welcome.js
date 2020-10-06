@@ -1,7 +1,14 @@
+/**
+ * Author: zollero
+ * Github: https://github.com/zollero
+ * 
+ */
 
 const ONE_IMG_REGEX = /<img class="fp-one-imagen" src="([\S]*)"/;
 
-const weekDays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+const current = new Date();
+
+const weekDays = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thur.', 'Fri.', 'Sat.'];
 
 const bgImg = '/var/mobile/Library/Mobile Documents/iCloud~dk~simonbs~Scriptable/Documents/bg6.PNG';
 
@@ -39,47 +46,58 @@ const baseWeatherUrl = 'https://restapi.amap.com/v3/weather/weatherInfo?key=02f3
    *  }
    */
 
-  console.log(WEATHER)
+  let weatherInfo = {};
 
+  console.log(WEATHER)
+  if (WEATHER.lives && WEATHER.lives[0]) {
+    weatherInfo = WEATHER.lives[0];
+  }
 
   const img = await new Request(imgUrl).loadImage();
   
   widget.backgroundImage = Image.fromFile(bgImg);
 
   const firstStack = widget.addStack();
-
   firstStack.layoutHorizontally();
-  // firstStack.setPadding(15, 15, 15, 15);
-  firstStack.backgroundColor = new Color('#ffffff', 0.4);
   firstStack.spacing = 20;
 
-  const imgStack = firstStack.addStack();
   const textStack = firstStack.addStack();
+  const imgStack = firstStack.addStack();
 
-  // imgStack.size = new Size(150, 100);
   textStack.size = new Size(100, 120)
   textStack.layoutVertically();
-  textStack.backgroundColor = new Color('#ff0000', 0.4);
   textStack.centerAlignContent();
+  textStack.spacing = 20;
 
   const imgLine = imgStack.addImage(img);
   imgLine.imageSize = new Size(180, 120);
   imgLine.cornerRadius = 10;
 
-  const weatherLine = textStack.addText('22°C')
-  weatherLine.textColor = new Color('#ff0000');
+  const weatherLine = textStack.addText(`     ${weatherInfo.temperature}°`)
+  weatherLine.textColor = new Color('#ffffff');
+  weatherLine.font = Font.mediumRoundedSystemFont(30);
   weatherLine.centerAlignText();
+  weatherLine.borderWidth = 5;
 
-  const dateLine = textStack.addText('Monday')
-  dateLine.textColor = new Color('#ffffff');
-  dateLine.font = Font.italicSystemFont(10);
+  const weekLine = textStack.addText(('0' + (current.getMonth() + 1)).substr(-2) + '-' + ('0' + current.getDate()).substr(-2) + '      ' + weekDays[current.getDay()])
+  weekLine.textColor = new Color('#ffffff');
+  weekLine.font = Font.mediumRoundedSystemFont(14);
 
+  const subWeather = textStack.addStack();
+  subWeather.layoutHorizontally();
+  subWeather.spacing = 18;
+
+  const weatherLine2 = subWeather.addText(weatherInfo.weather);
+  weatherLine2.font = Font.regularRoundedSystemFont(12);
+  weatherLine2.textColor = new Color('#ffffff');
+
+  const windInfo = weatherInfo.winddirection + '风' + weatherInfo.windpower + '级';
+  const weatherLine3 = subWeather.addText(windInfo);
+  weatherLine3.font = Font.regularRoundedSystemFont(12);
+  weatherLine3.textColor = new Color('#ffffff');
 
   widget.presentMedium();
   
   Script.setWidget(widget);
   Script.complete();
 })();
-
-
-
