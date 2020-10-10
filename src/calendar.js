@@ -1,5 +1,7 @@
 
 
 
-
-const events = Calendar.forEvents();
+(async () => {
+  const events = await Calendar.forEvents();
+  console.log(events)
+})();
