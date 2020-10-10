@@ -53,18 +53,22 @@ const baseWeatherUrl = 'https://restapi.amap.com/v3/weather/weatherInfo?key=02f3
     weatherInfo = WEATHER.lives[0];
   }
 
+  // console.log(weatherInfo)
+
   const img = await new Request(imgUrl).loadImage();
   
   widget.backgroundImage = Image.fromFile(bgImg);
 
   const firstStack = widget.addStack();
   firstStack.layoutHorizontally();
-  firstStack.spacing = 20;
+  firstStack.centerAlignContent();
+  firstStack.spacing = 10;
+  firstStack.size = new Size(330, 155)
 
   const textStack = firstStack.addStack();
   const imgStack = firstStack.addStack();
 
-  textStack.size = new Size(100, 120)
+  textStack.size = new Size(140, 120)
   textStack.layoutVertically();
   textStack.centerAlignContent();
   textStack.spacing = 20;
@@ -75,25 +79,25 @@ const baseWeatherUrl = 'https://restapi.amap.com/v3/weather/weatherInfo?key=02f3
 
   const weatherLine = textStack.addText(`     ${weatherInfo.temperature}°`)
   weatherLine.textColor = new Color('#ffffff');
-  weatherLine.font = Font.mediumRoundedSystemFont(30);
+  weatherLine.font = Font.mediumRoundedSystemFont(32);
   weatherLine.centerAlignText();
   weatherLine.borderWidth = 5;
 
-  const weekLine = textStack.addText(('0' + (current.getMonth() + 1)).substr(-2) + '-' + ('0' + current.getDate()).substr(-2) + '      ' + weekDays[current.getDay()])
+  const weekLine = textStack.addText(('0' + (current.getMonth() + 1)).substr(-2) + '-' + ('0' + current.getDate()).substr(-2) + '             ' + weekDays[current.getDay()])
   weekLine.textColor = new Color('#ffffff');
-  weekLine.font = Font.mediumRoundedSystemFont(14);
+  weekLine.font = Font.mediumRoundedSystemFont(16);
 
   const subWeather = textStack.addStack();
   subWeather.layoutHorizontally();
-  subWeather.spacing = 18;
+  subWeather.spacing = 30;
 
   const weatherLine2 = subWeather.addText(weatherInfo.weather);
-  weatherLine2.font = Font.regularRoundedSystemFont(12);
+  weatherLine2.font = Font.regularRoundedSystemFont(14);
   weatherLine2.textColor = new Color('#ffffff');
 
   const windInfo = weatherInfo.winddirection + '风' + weatherInfo.windpower + '级';
   const weatherLine3 = subWeather.addText(windInfo);
-  weatherLine3.font = Font.regularRoundedSystemFont(12);
+  weatherLine3.font = Font.regularRoundedSystemFont(14);
   weatherLine3.textColor = new Color('#ffffff');
 
   widget.presentMedium();
