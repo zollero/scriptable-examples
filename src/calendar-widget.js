@@ -183,7 +183,7 @@ let baseWeatherUrl = `https://restapi.amap.com/v3/weather/weatherInfo?key=${AMAP
     eventListStack.size = new Size(170, 120);
     eventListStack.layoutVertically();
     // eventListStack.topAlignContent();
-    eventListStack.spacing = 12;
+    eventListStack.spacing = 15;
     
     for (let i = 0; i < 3; i++) {
       const eventStack = eventListStack.addStack();
