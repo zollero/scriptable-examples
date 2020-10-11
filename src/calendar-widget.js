@@ -14,6 +14,9 @@ const bgImg = '/var/mobile/Library/Mobile Documents/iCloud~dk~simonbs~Scriptable
 
 const widget = new ListWidget();
 
+const calendars = await Calendar.forEvents();
+const calendarEvents = await CalendarEvent.today(calendars);
+
 Location.setAccuracyToHundredMeters();
 
 const AMAP_KEY = '02f33d95d248f25fad4d99e687c38d96';
@@ -51,6 +54,7 @@ let baseWeatherUrl = `https://restapi.amap.com/v3/weather/weatherInfo?key=${AMAP
 
     const firstStack = widget.addStack();
     firstStack.layoutVertically();
+    firstStack.spacing = 10;
 
     const weatherStack = firstStack.addStack();
     weatherStack.size = new Size(330, 130);
@@ -129,53 +133,87 @@ let baseWeatherUrl = `https://restapi.amap.com/v3/weather/weatherInfo?key=${AMAP
     nextEvent.size = new Size(134, 120);
     // nextEvent.backgroundColor = new Color('#F3ABA5', 0.2);
     nextEvent.layoutVertically();
-    nextEvent.topAlignContent();
-    // nextEvent.spacing = 15;
+    nextEvent.centerAlignContent();
 
-    const nextEventLabel = nextEvent.addText('UP NEXT');
-    nextEvent.addSpacer();
-    nextEventLabel.font = Font.mediumRoundedSystemFont(14);
-    nextEventLabel.textColor = new Color('#ff0000');
+    const goingOnEvent = calendarEvents.find(v => !v.isAllDay && current.getTime() > new Date(v.startDate).getTime() && current.getTime() < new Date(v.endDate).getTime());
+    const nextOneEvent = calendarEvents.find(v => !v.isAllDay && current.getTime() < new Date(v.startDate).getTime());
+    const allDayEvent = calendarEvents.find(v => v.isAllDay);
+    let currentEvent;
+    console.log(goingOnEvent)
+    console.log(nextOneEvent)
 
-    const nextEventTitle = nextEvent.addText('记得写公众号文章，按时发布');
-    nextEventTitle.font = Font.mediumRoundedSystemFont(15);
-    nextEventTitle.textColor = new Color('#dddddd');
+    if (goingOnEvent || nextOneEvent || allDayEvent) {
+      const nextEventLabel = nextEvent.addText(nextOneEvent ? 'UP NEXT' : 'GOING ON');
+      nextEvent.addSpacer();
+      nextEventLabel.font = Font.mediumRoundedSystemFont(14);
+      nextEventLabel.textColor = new Color('#ff0000');
 
-    nextEvent.addSpacer();
+      currentEvent = goingOnEvent || nextOneEvent || allDayEvent;
 
-    const nextEventTime = nextEvent.addText('2:00 - 3:00');
-    nextEventTime.font = Font.italicSystemFont(12);
-    nextEventTime.textColor = new Color('#dddddd');
+      const nextEventTitleStack = nextEvent.addStack();
+      nextEventTitleStack.layoutVertically();
+      nextEventTitleStack.spacing = 10;
+
+      const nextEventSign = nextEventTitleStack.addStack();
+      nextEventSign.size = new Size(16, 4);
+      nextEventSign.cornerRadius = 3;
+      nextEventSign.backgroundColor = new Color(`#${currentEvent.calendar.color.hex}`, 0.7);
+  
+      const nextEventTitle = nextEventTitleStack.addText(currentEvent.title);
+      nextEventTitle.font = Font.mediumRoundedSystemFont(15);
+      nextEventTitle.textColor = new Color(`#dddddd`);
+  
+      nextEvent.addSpacer();
+
+      const eventStartTime = ('0' + new Date(currentEvent.startDate).getHours()).substr(-2) + ':' + ('0' + new Date(currentEvent.startDate).getMinutes()).substr(-2);
+      const eventEndTime = ('0' + new Date(currentEvent.endDate).getHours()).substr(-2) + ':' + ('0' + new Date(currentEvent.endDate).getMinutes()).substr(-2);
+  
+      const nextEventTime = nextEvent.addText(currentEvent.isAllDay ? 'All Day' : `${eventStartTime} - ${eventEndTime}`);
+      nextEventTime.font = Font.italicSystemFont(12);
+      nextEventTime.textColor = new Color('#dddddd');
+    } else {
+      const nextEventLabel = nextEvent.addText('NO EVENTS TODAY!')
+      nextEventLabel.font = Font.mediumRoundedSystemFont(14);
+      nextEventLabel.textColor = new Color('#dddddd');
+    }
+
+    const restEvents = calendarEvents.filter(v => currentEvent && (v.identifier !== currentEvent.identifier) && (current.getTime() < new Date(v.endDate).getTime()));
 
     const eventListStack = calendarStack.addStack();
-    eventListStack.size = new Size(170, 150);
+    eventListStack.size = new Size(170, 120);
     eventListStack.layoutVertically();
-    // eventListStack.backgroundColor = new Color('#0000ff', 0.2);
-    eventListStack.addSpacer();
+    // eventListStack.topAlignContent();
+    eventListStack.spacing = 12;
     
     for (let i = 0; i < 3; i++) {
       const eventStack = eventListStack.addStack();
-      eventStack.layoutHorizontally();
-      eventStack.centerAlignContent();
-      eventStack.spacing = 5;
-      const signStack = eventStack.addStack();
-      signStack.size = new Size(8, 8)
-      signStack.cornerRadius = 8;
-      signStack.backgroundColor = new Color('#ff0000')
-      const eventTitle =  eventStack.addText('记得写公众号文章，按时发布')
-      eventTitle.font = Font.italicSystemFont(12);
-      eventTitle.textColor = new Color('#eeeeee');
+      if (restEvents[i]) {
+        eventStack.spacing = 5;
+        const signStack = eventStack.addStack();
+        signStack.size = new Size(4, restEvents[i].isAllDay ? 15 : 30)
+        signStack.cornerRadius = 3;
+        signStack.backgroundColor = new Color(`#${restEvents[i].calendar.color.hex}`, 0.7);
 
-      eventListStack.addSpacer();
+        const eventInfo = eventStack.addStack();
+        eventInfo.layoutVertically();
+        const eventTitle = eventInfo.addText(restEvents[i].title)
+        eventTitle.font = Font.italicSystemFont(12);
+        eventTitle.textColor = new Color('#eeeeee');
+        eventTitle.lineLimit = 1;
+
+        if (!restEvents[i].isAllDay) {
+          const eventStartTime = ('0' + new Date(restEvents[i].startDate).getHours()).substr(-2) + ':' + ('0' + new Date(restEvents[i].startDate).getMinutes()).substr(-2);
+          const eventEndTime = ('0' + new Date(restEvents[i].endDate).getHours()).substr(-2) + ':' + ('0' + new Date(restEvents[i].endDate).getMinutes()).substr(-2);
+          const eventTime = eventInfo.addText(restEvents[i].isAllDay ? 'All Day' : `${eventStartTime} - ${eventEndTime}`);
+          eventTime.font = Font.italicSystemFont(12);
+          eventTime.textColor = new Color('#dddddd');
+        }
+      }
     }
-    
-
 
     widget.presentLarge();
-    
     Script.setWidget(widget);
     Script.complete();
-
   } catch (error) {
     console.error(error);
   }
