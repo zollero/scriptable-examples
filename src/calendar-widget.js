@@ -5,6 +5,7 @@
  */
 
 const ONE_IMG_REGEX = /<img class="fp-one-imagen" src="([\S]*)"/;
+const ONE_STATEMENT_REGEX = /class="fp-one-cita"\>\s*<a href="(\S)*"\>([\S]*)\<\/a\>/;
 
 const current = new Date();
 
@@ -28,6 +29,7 @@ let baseWeatherUrl = `https://restapi.amap.com/v3/weather/weatherInfo?key=${AMAP
     // 获取 one 当日图片
     const ONE_HOME = await new Request('http://wufazhuce.com/').loadString();
     const imgUrl = ONE_IMG_REGEX.exec(ONE_HOME)[1];
+    const statement = ONE_STATEMENT_REGEX.exec(ONE_HOME)[2];
 
     const location = await Location.current();
     decodeCity += `&location=${location.longitude},${location.latitude}`;
@@ -172,7 +174,7 @@ let baseWeatherUrl = `https://restapi.amap.com/v3/weather/weatherInfo?key=${AMAP
       nextEventTime.font = Font.italicSystemFont(12);
       nextEventTime.textColor = new Color('#dddddd');
     } else {
-      const nextEventLabel = nextEvent.addText('NO EVENTS TODAY!')
+      const nextEventLabel = nextEvent.addText('EMPTY TODAY!')
       nextEventLabel.font = Font.mediumRoundedSystemFont(14);
       nextEventLabel.textColor = new Color('#dddddd');
     }
@@ -184,31 +186,37 @@ let baseWeatherUrl = `https://restapi.amap.com/v3/weather/weatherInfo?key=${AMAP
     eventListStack.layoutVertically();
     // eventListStack.topAlignContent();
     eventListStack.spacing = 15;
-    
-    for (let i = 0; i < 3; i++) {
-      const eventStack = eventListStack.addStack();
-      if (restEvents[i]) {
-        eventStack.spacing = 5;
-        const signStack = eventStack.addStack();
-        signStack.size = new Size(4, restEvents[i].isAllDay ? 15 : 30)
-        signStack.cornerRadius = 3;
-        signStack.backgroundColor = new Color(`#${restEvents[i].calendar.color.hex}`, 0.7);
 
-        const eventInfo = eventStack.addStack();
-        eventInfo.layoutVertically();
-        const eventTitle = eventInfo.addText(restEvents[i].title)
-        eventTitle.font = Font.italicSystemFont(12);
-        eventTitle.textColor = new Color('#eeeeee');
-        eventTitle.lineLimit = 1;
-
-        if (!restEvents[i].isAllDay) {
-          const eventStartTime = ('0' + new Date(restEvents[i].startDate).getHours()).substr(-2) + ':' + ('0' + new Date(restEvents[i].startDate).getMinutes()).substr(-2);
-          const eventEndTime = ('0' + new Date(restEvents[i].endDate).getHours()).substr(-2) + ':' + ('0' + new Date(restEvents[i].endDate).getMinutes()).substr(-2);
-          const eventTime = eventInfo.addText(restEvents[i].isAllDay ? 'All Day' : `${eventStartTime} - ${eventEndTime}`);
-          eventTime.font = Font.italicSystemFont(12);
-          eventTime.textColor = new Color('#dddddd');
+    if (restEvents.length > 0) {
+      for (let i = 0; i < 3; i++) {
+        const eventStack = eventListStack.addStack();
+        if (restEvents[i]) {
+          eventStack.spacing = 5;
+          const signStack = eventStack.addStack();
+          signStack.size = new Size(4, restEvents[i].isAllDay ? 15 : 30)
+          signStack.cornerRadius = 3;
+          signStack.backgroundColor = new Color(`#${restEvents[i].calendar.color.hex}`, 0.7);
+  
+          const eventInfo = eventStack.addStack();
+          eventInfo.layoutVertically();
+          const eventTitle = eventInfo.addText(restEvents[i].title)
+          eventTitle.font = Font.italicSystemFont(12);
+          eventTitle.textColor = new Color('#eeeeee');
+          eventTitle.lineLimit = 1;
+  
+          if (!restEvents[i].isAllDay) {
+            const eventStartTime = ('0' + new Date(restEvents[i].startDate).getHours()).substr(-2) + ':' + ('0' + new Date(restEvents[i].startDate).getMinutes()).substr(-2);
+            const eventEndTime = ('0' + new Date(restEvents[i].endDate).getHours()).substr(-2) + ':' + ('0' + new Date(restEvents[i].endDate).getMinutes()).substr(-2);
+            const eventTime = eventInfo.addText(restEvents[i].isAllDay ? 'All Day' : `${eventStartTime} - ${eventEndTime}`);
+            eventTime.font = Font.italicSystemFont(12);
+            eventTime.textColor = new Color('#dddddd');
+          }
         }
       }
+    } else {
+      const statementText = eventListStack.addText(statement);
+      statementText.font = Font.italicSystemFont(14);
+      statementText.textColor = new Color('#ffffff');
     }
 
     widget.presentLarge();
