@@ -14,6 +14,7 @@ const weekDays = ['Sun.', 'Mon.', 'Tue.', 'Wed.', 'Thur.', 'Fri.', 'Sat.'];
 const bgImg = '/var/mobile/Library/Mobile Documents/iCloud~dk~simonbs~Scriptable/Documents/bg7.PNG';
 
 const widget = new ListWidget();
+widget.url = 'calshow://';
 
 const calendars = await Calendar.forEvents();
 const calendarEvents = await CalendarEvent.today(calendars);
