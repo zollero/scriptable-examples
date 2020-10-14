@@ -148,7 +148,7 @@ let baseWeatherUrl = `https://restapi.amap.com/v3/weather/weatherInfo?key=${AMAP
       const nextEventLabel = nextEvent.addText(nextOneEvent ? 'UP NEXT' : 'GOING ON');
       nextEvent.addSpacer();
       nextEventLabel.font = Font.mediumRoundedSystemFont(14);
-      nextEventLabel.textColor = new Color('#ff0000');
+      nextEventLabel.textColor = new Color(nextOneEvent ? '#ff0000' : '#00ff00');
 
       currentEvent = goingOnEvent || nextOneEvent || allDayEvent;
 
@@ -164,6 +164,10 @@ let baseWeatherUrl = `https://restapi.amap.com/v3/weather/weatherInfo?key=${AMAP
       const nextEventTitle = nextEventTitleStack.addText(currentEvent.title);
       nextEventTitle.font = Font.mediumRoundedSystemFont(15);
       nextEventTitle.textColor = new Color(`#dddddd`);
+
+      const nextEventLocation = nextEventTitleStack.addText(currentEvent.location ? '🎯' + currentEvent.location: '     ');
+      nextEventLocation.font = Font.regularRoundedSystemFont(14);
+      nextEventLocation.textColor = new Color('#f3aba5')
   
       nextEvent.addSpacer();
 
@@ -174,9 +178,12 @@ let baseWeatherUrl = `https://restapi.amap.com/v3/weather/weatherInfo?key=${AMAP
       nextEventTime.font = Font.italicSystemFont(12);
       nextEventTime.textColor = new Color('#dddddd');
     } else {
+      nextEvent.layoutHorizontally();
+      nextEvent.addSpacer();
       const nextEventLabel = nextEvent.addText('EMPTY TODAY!')
       nextEventLabel.font = Font.mediumRoundedSystemFont(14);
-      nextEventLabel.textColor = new Color('#dddddd');
+      nextEventLabel.textColor = new Color('#abafcd');
+      nextEvent.addSpacer();
     }
 
     const restEvents = calendarEvents.filter(v => currentEvent && (v.identifier !== currentEvent.identifier) && (current.getTime() < new Date(v.endDate).getTime()));
@@ -216,7 +223,7 @@ let baseWeatherUrl = `https://restapi.amap.com/v3/weather/weatherInfo?key=${AMAP
     } else {
       const statementText = eventListStack.addText(statement);
       statementText.font = Font.italicSystemFont(14);
-      statementText.textColor = new Color('#ffffff');
+      statementText.textColor = new Color('#bbceca');
     }
 
     widget.presentLarge();
