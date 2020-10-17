@@ -6,6 +6,7 @@
 
 const ONE_IMG_REGEX = /<img class="fp-one-imagen" src="([\S]*)"/;
 const ONE_STATEMENT_REGEX = /class="fp-one-cita"\>\s*<a href="(\S)*"\>([\S]*)\<\/a\>/;
+const ONE_VOL_REGEX = /class="fp-one-titulo-pubdate"\>\s*\<p class="titulo"\>([\S]*)\<\/p\>/;
 
 const current = new Date();
 
@@ -31,6 +32,7 @@ let baseWeatherUrl = `https://restapi.amap.com/v3/weather/weatherInfo?key=${AMAP
     const ONE_HOME = await new Request('http://wufazhuce.com/').loadString();
     const imgUrl = ONE_IMG_REGEX.exec(ONE_HOME)[1];
     const statement = ONE_STATEMENT_REGEX.exec(ONE_HOME)[2];
+    const oneVol = ONE_VOL_REGEX.exec(ONE_HOME)[1];
 
     const location = await Location.current();
     decodeCity += `&location=${location.longitude},${location.latitude}`;
@@ -225,6 +227,15 @@ let baseWeatherUrl = `https://restapi.amap.com/v3/weather/weatherInfo?key=${AMAP
       const statementText = eventListStack.addText(statement);
       statementText.font = Font.italicSystemFont(14);
       statementText.textColor = new Color('#bbceca');
+
+      eventListStack.addSpacer();
+
+      const oneVolStack = eventListStack.addStack();
+      oneVolStack.layoutHorizontally();
+      oneVolStack.addSpacer();
+      const oneVolText = oneVolStack.addText(`ONE · ${oneVol}   `);
+      oneVolText.font = Font.italicSystemFont(12);
+      oneVolText.textColor = new Color('#bbceca');
     }
 
     widget.presentLarge();
