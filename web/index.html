@@ -1,0 +1,78 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>壁纸剪辑</title>
+</head>
+<body>
+  <div>
+    <input type="file" name="xx" id="xx" />
+  </div>
+  <img alt="" srcset="" id="yy" />
+  <p>pppp1</p>
+  <canvas id="zz"></canvas>
+  <p>pppp2</p>
+  <canvas id="zz2"></canvas>
+
+  <script type="text/javascript">
+    var file = document.getElementById("xx");
+    var img = document.getElementById("yy");
+    var cc = document.getElementById("zz");
+    var cc2 = document.getElementById("zz2");
+
+    cc.width = 987;
+    cc.height = 1035;
+
+    cc2.width = 987;
+    cc2.height = 465;
+
+    var c1 = cc.getContext("2d");
+    var c2 = cc2.getContext("2d");
+
+
+    file.onchange = function(e) {
+      var path = e.target.value;
+      img.src = window.URL.createObjectURL(e.target.files[0]);
+    }
+
+    img.onload = function(e) {
+      console.log(e);
+
+      const imgOriginalWidth = e.path[0].naturalWidth;
+      const imgOriginalHeight = e.path[0].naturalHeight;
+      // 1125, 2436
+      const times = imgOriginalWidth / 1125;
+      const tt = imgOriginalHeight / 2436;
+      console.log(times, tt)
+
+      c1.drawImage(
+        img,
+        69 * times,
+        213 * times,
+        987 * times,
+        1035 * times,
+        0 * times,
+        0 * times,
+        987,
+        1035
+      )
+
+      c2.drawImage(
+        img,
+        69 * times,
+        213 * times,
+        987 * times,
+        465 * times,
+        0 * times,
+        0 * times,
+        987,
+        465
+      )
+
+    }
+  </script>
+</body>
+</html>
