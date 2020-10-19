@@ -215,7 +215,7 @@ let baseWeatherUrl = `https://restapi.amap.com/v3/weather/weatherInfo?key=${AMAP
       const nextEventLabel = nextEvent.addText(nextOneEvent ? 'UP NEXT' : 'GOING ON');
       nextEvent.addSpacer();
       nextEventLabel.font = Font.mediumRoundedSystemFont(14);
-      nextEventLabel.textColor = new Color(nextOneEvent ? '#ff0000' : '#00ff00');
+      nextEventLabel.textColor = new Color(nextOneEvent ? '#ec407a' : '#00ff00');
 
       currentEvent = goingOnEvent || nextOneEvent || allDayEvent;
 
@@ -229,11 +229,12 @@ let baseWeatherUrl = `https://restapi.amap.com/v3/weather/weatherInfo?key=${AMAP
       nextEventSign.backgroundColor = new Color(`#${currentEvent.calendar.color.hex}`, 0.7);
   
       const nextEventTitle = nextEventTitleStack.addText(currentEvent.title);
-      nextEventTitle.font = Font.mediumRoundedSystemFont(15);
+      nextEventTitle.font = Font.mediumRoundedSystemFont(14);
       nextEventTitle.textColor = new Color(`#dddddd`);
+      nextEventTitle.lineLimit = 2;
 
-      const nextEventLocation = nextEventTitleStack.addText(currentEvent.location ? '🎯' + currentEvent.location: '     ');
-      nextEventLocation.font = Font.regularRoundedSystemFont(14);
+      const nextEventLocation = nextEventTitleStack.addText(currentEvent.location ? currentEvent.location: '     ');
+      nextEventLocation.font = Font.regularRoundedSystemFont(12);
       nextEventLocation.textColor = new Color('#f3aba5')
   
       nextEvent.addSpacer();
