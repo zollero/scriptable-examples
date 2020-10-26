@@ -208,8 +208,6 @@ let baseWeatherUrl = `https://restapi.amap.com/v3/weather/weatherInfo?key=${AMAP
     const nextOneEvent = calendarEvents.find(v => !v.isAllDay && current.getTime() < new Date(v.startDate).getTime());
     const allDayEvent = calendarEvents.find(v => v.isAllDay);
     let currentEvent;
-    console.log(goingOnEvent)
-    console.log(nextOneEvent)
 
     if (goingOnEvent || nextOneEvent || allDayEvent) {
       const nextEventLabel = nextEvent.addText(nextOneEvent ? 'UP NEXT' : 'GOING ON');
@@ -259,7 +257,6 @@ let baseWeatherUrl = `https://restapi.amap.com/v3/weather/weatherInfo?key=${AMAP
     const eventListStack = calendarStack.addStack();
     eventListStack.size = new Size(170, 120);
     eventListStack.layoutVertically();
-    // eventListStack.topAlignContent();
     eventListStack.spacing = 15;
 
     if (restEvents.length > 0) {
@@ -288,7 +285,9 @@ let baseWeatherUrl = `https://restapi.amap.com/v3/weather/weatherInfo?key=${AMAP
           }
         }
       }
-      eventListStack.addSpacer();
+      if (restEvents.length < 3) {
+        eventListStack.addSpacer();
+      }
     } else {
       const statementText = eventListStack.addText(statement);
       statementText.font = Font.italicSystemFont(14);
