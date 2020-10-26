@@ -288,6 +288,7 @@ let baseWeatherUrl = `https://restapi.amap.com/v3/weather/weatherInfo?key=${AMAP
           }
         }
       }
+      eventListStack.addSpacer();
     } else {
       const statementText = eventListStack.addText(statement);
       statementText.font = Font.italicSystemFont(14);
