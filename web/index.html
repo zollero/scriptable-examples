@@ -12,16 +12,20 @@
     <input type="file" name="xx" id="xx" />
   </div>
   <img alt="" srcset="" id="yy" />
-  <p>pppp1</p>
+  <p>顶部大组件</p>
   <canvas id="zz"></canvas>
-  <p>pppp2</p>
+  <p>顶部中组件</p>
   <canvas id="zz2"></canvas>
+  <p>底部中组件</p>
+  <canvas id="zz3"></canvas>
+
 
   <script type="text/javascript">
     var file = document.getElementById("xx");
     var img = document.getElementById("yy");
     var cc = document.getElementById("zz");
     var cc2 = document.getElementById("zz2");
+    var cc3 = document.getElementById("zz3");
 
     cc.width = 987;
     cc.height = 1035;
@@ -29,8 +33,12 @@
     cc2.width = 987;
     cc2.height = 465;
 
+    cc3.width = 987;
+    cc3.height = 465;
+
     var c1 = cc.getContext("2d");
     var c2 = cc2.getContext("2d");
+    var c3 = cc3.getContext('2d');
 
 
     file.onchange = function(e) {
@@ -64,6 +72,18 @@
         img,
         69 * times,
         213 * times,
+        987 * times,
+        465 * times,
+        0 * times,
+        0 * times,
+        987,
+        465
+      );
+
+      c3.drawImage(
+        img,
+        69 * times,
+        1353 * times,
         987 * times,
         465 * times,
         0 * times,

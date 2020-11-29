@@ -131,14 +131,12 @@ let baseWeatherUrl = `https://restapi.amap.com/v3/weather/weatherInfo?key=${AMAP
     weatherLine.font = Font.mediumRoundedSystemFont(80);
     weatherLine.centerAlignText();
 
-    weatherStack.addSpacer();
-
     const weatherInfoStack = weatherStack.addStack();
     weatherInfoStack.layoutHorizontally();
     weatherInfoStack.addSpacer();
     const weatherInfoText = weatherInfoStack.addText(weatherInfo.weather);
     weatherInfoText.textColor = new Color('#ffffff');
-    weatherInfoText.font = Font.mediumRoundedSystemFont(20);
+    weatherInfoText.font = Font.mediumRoundedSystemFont(16);
     weatherInfoStack.addSpacer();
 
     weatherStack.addSpacer();
@@ -148,7 +146,7 @@ let baseWeatherUrl = `https://restapi.amap.com/v3/weather/weatherInfo?key=${AMAP
     dateStack.addSpacer();
     const weekText = dateStack.addText(weekDays[current.getDay()] + '      ' + today);
     weekText.textColor = new Color('#ffffff');
-    weekText.font = Font.lightSystemFont(20);
+    weekText.font = Font.regularMonospacedSystemFont(20);
     dateStack.addSpacer();
 
     weatherStack.addSpacer();
@@ -159,7 +157,7 @@ let baseWeatherUrl = `https://restapi.amap.com/v3/weather/weatherInfo?key=${AMAP
     tempStack.addSpacer();
     const temperatureText = tempStack.addText(`${weatherInfo.temperature}°`);
     temperatureText.textColor = new Color('#ffffff');
-    temperatureText.font = Font.mediumRoundedSystemFont(60);
+    temperatureText.font = Font.mediumMonospacedSystemFont(60);
     temperatureText.centerAlignText();
     tempStack.addSpacer();
 
@@ -169,9 +167,11 @@ let baseWeatherUrl = `https://restapi.amap.com/v3/weather/weatherInfo?key=${AMAP
     cityStack.layoutHorizontally();
     cityStack.addSpacer();
     const cityLine = cityStack.addText(weatherInfo.city);
-    cityLine.font = Font.regularRoundedSystemFont(20);
+    cityLine.font = Font.regularMonospacedSystemFont(20);
     cityLine.textColor = new Color('#ffffff');
     cityStack.addSpacer();
+
+    weatherStack.addSpacer();
 
     widget.presentLarge();
     Script.setWidget(widget);
