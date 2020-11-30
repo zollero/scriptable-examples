@@ -128,7 +128,7 @@ let baseWeatherUrl = `https://restapi.amap.com/v3/weather/weatherInfo?key=${AMAP
     const weatherLine = temperatureStack.addText(`${weatherIcon ? weatherIcon : weatherInfo.weather}`)
     temperatureStack.addSpacer();
     weatherLine.textColor = new Color('#ffffff');
-    weatherLine.font = Font.mediumRoundedSystemFont(80);
+    weatherLine.font = Font.mediumRoundedSystemFont(90);
     weatherLine.centerAlignText();
 
     const weatherInfoStack = weatherStack.addStack();
@@ -167,7 +167,7 @@ let baseWeatherUrl = `https://restapi.amap.com/v3/weather/weatherInfo?key=${AMAP
     cityStack.layoutHorizontally();
     cityStack.addSpacer();
     const cityLine = cityStack.addText(weatherInfo.city);
-    cityLine.font = Font.regularMonospacedSystemFont(20);
+    cityLine.font = Font.regularMonospacedSystemFont(16);
     cityLine.textColor = new Color('#ffffff');
     cityStack.addSpacer();
 
